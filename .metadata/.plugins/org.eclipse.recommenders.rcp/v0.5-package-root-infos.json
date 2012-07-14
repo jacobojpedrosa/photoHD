@@ -1,0 +1,129 @@
+[
+  {
+    "symbolicName": "GoogleAdMobAdsSdk-6.0.1",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "e6b52dcd6402380542cb37557bd04e06e6d7e47d",
+    "jarFileModificationDate": "2012-07-06T00:40:14-07:00",
+    "location": "/Users/jacobopedrosa/Projects/workspace/APPdictus/libs/GoogleAdMobAdsSdk-6.0.1.jar",
+    "javaRuntime": false
+  },
+  {
+    "jarFileModificationDate": "2012-06-29T10:15:47-07:00",
+    "location": "/Users/jacobopedrosa/Projects/workspace/APPdictus/src",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "effects",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "b24ce02b6f4670fb249ac7978fa0735f9c5f9758",
+    "jarFileModificationDate": "2012-06-30T10:20:13-07:00",
+    "location": "/Users/jacobopedrosa/Library/android-sdk-macosx/add-ons/addon-google_apis-google-15/libs/effects.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "usb",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "4dc9558a0b1dba327a59a7753f4a05e00d499723",
+    "jarFileModificationDate": "2012-06-30T10:20:13-07:00",
+    "location": "/Users/jacobopedrosa/Library/android-sdk-macosx/add-ons/addon-google_apis-google-15/libs/usb.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "EasyTracker",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "b1e4fba32a96d3377aaff80d2bf00d5e3b8e2513",
+    "jarFileModificationDate": "2012-05-23T16:03:44-07:00",
+    "location": "/Users/jacobopedrosa/Projects/workspace/APPdictus/libs/EasyTracker.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "annotations",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "b1648b4ed31a4a38665915f7163c9f3972b0b724",
+    "jarFileModificationDate": "2012-06-29T12:22:21-07:00",
+    "location": "/Users/jacobopedrosa/Library/android-sdk-macosx/tools/support/annotations.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "GoogleAdMobAdsSdk-6.0.1",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "e6b52dcd6402380542cb37557bd04e06e6d7e47d",
+    "jarFileModificationDate": "2012-05-09T00:42:46-07:00",
+    "location": "/Users/jacobopedrosa/Downloads/GoogleAdMobAdsSdkAndroid-6.0.1/GoogleAdMobAdsSdk-6.0.1.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "maps",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "0ee9136bd8942121190f3348a8b122dd7ff8989b",
+    "jarFileModificationDate": "2012-06-30T10:20:13-07:00",
+    "location": "/Users/jacobopedrosa/Library/android-sdk-macosx/add-ons/addon-google_apis-google-15/libs/maps.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "libGoogleAnalytics",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "8d0254fe638021ff2ae4fe5bd53c2937006fdab5",
+    "jarFileModificationDate": "2012-05-22T09:10:00-07:00",
+    "location": "/Users/jacobopedrosa/Projects/workspace/APPdictus/libs/libGoogleAnalytics.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "android",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "92822ec981a4d0a7f002c792e7b3b60f9a1f26fa",
+    "jarFileModificationDate": "2012-06-29T11:22:29-07:00",
+    "location": "/Users/jacobopedrosa/Library/android-sdk-macosx/platforms/android-15/android.jar",
+    "javaRuntime": false
+  },
+  {
+    "jarFileModificationDate": "2012-06-30T23:56:04-07:00",
+    "location": "/Users/jacobopedrosa/Projects/workspace/APPdictus/gen",
+    "javaRuntime": false
+  }
+]

@@ -1,0 +1,22 @@
+{
+  "/Users/jacobopedrosa/Projects/workspace/APPdictus/libs/GoogleAdMobAdsSdk-6.0.1.jar": {
+    "location": "/Users/jacobopedrosa/Projects/workspace/APPdictus/libs/GoogleAdMobAdsSdk-6.0.1.jar",
+    "status": "UNRESOLVED",
+    "error": "No call model found for \u0027/Users/jacobopedrosa/Projects/workspace/APPdictus/libs/GoogleAdMobAdsSdk-6.0.1.jar\u0027. Neither fingerprint \u0027e6b52dcd6402380542cb37557bd04e06e6d7e47d\u0027 nor symbolic name \u0027GoogleAdMobAdsSdk-6.0.1\u0027 are known."
+  },
+  "/Users/jacobopedrosa/Library/android-sdk-macosx/platforms/android-15/android.jar": {
+    "location": "/Users/jacobopedrosa/Library/android-sdk-macosx/platforms/android-15/android.jar",
+    "status": "UNRESOLVED",
+    "error": "No call model found for \u0027/Users/jacobopedrosa/Library/android-sdk-macosx/platforms/android-15/android.jar\u0027. Neither fingerprint \u002792822ec981a4d0a7f002c792e7b3b60f9a1f26fa\u0027 nor symbolic name \u0027android\u0027 are known."
+  },
+  "/Users/jacobopedrosa/Projects/workspace/APPdictus/gen": {
+    "location": "/Users/jacobopedrosa/Projects/workspace/APPdictus/gen",
+    "status": "UNRESOLVED",
+    "error": "No call model found for \u0027/Users/jacobopedrosa/Projects/workspace/APPdictus/gen\u0027. Neither fingerprint \u0027null\u0027 nor symbolic name \u0027null\u0027 are known."
+  },
+  "/Users/jacobopedrosa/Projects/workspace/APPdictus/src": {
+    "location": "/Users/jacobopedrosa/Projects/workspace/APPdictus/src",
+    "status": "UNRESOLVED",
+    "error": "No call model found for \u0027/Users/jacobopedrosa/Projects/workspace/APPdictus/src\u0027. Neither fingerprint \u0027null\u0027 nor symbolic name \u0027null\u0027 are known."
+  }
+}

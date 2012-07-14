@@ -1,0 +1,173 @@
+package com.noituk.appdictus;
+
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
+import com.google.ads.AdView;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import com.noituk.appdictus.model.Word;
+import com.noituk.appdictus.persistence.DatabaseHandler;
+import com.noituk.appdictus.persistence.WordReference;
+
+public class APPdictusActivity extends Activity {
+	private EditText search_word;
+	private ImageButton search_button;
+	private TextView search_results;
+	private TextView languaje_pair;
+	
+	private AdView adView;
+	//private Button goSearchList;
+	GoogleAnalyticsTracker tracker;
+	
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        tracker = GoogleAnalyticsTracker.getInstance();
+        tracker.startNewSession("UA-31977959-1", this);
+        tracker.trackPageView("/HomeSearchActivity");
+      
+        setContentView(R.layout.home_search);        
+        
+        this.search_word = (EditText)findViewById(R.id.search_word);
+        this.search_button = (ImageButton)findViewById(R.id.search_button);
+        this.search_results = (TextView)findViewById(R.id.search_results);
+        this.languaje_pair = (TextView)findViewById(R.id.languaje_pair);
+        
+     // Create the adView
+        adView = new AdView(this, AdSize.BANNER,"a14ff691cee2048");
+        
+        final DatabaseHandler db = new DatabaseHandler(this);
+        
+        this.search_button.setOnClickListener(new View.OnClickListener() {
+        	@TargetApi(9) public void onClick(View v) {
+        		ProgressDialog pd = new ProgressDialog(APPdictusActivity.this);
+                pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                pd.setMessage("Working...");
+                pd.setIndeterminate(true);
+                pd.setCancelable(false);
+
+            	String result = "";
+            	search_results.setTextColor(Color.rgb(33, 33, 88));
+            	//tracker.setCustomVar(1, "Languaje pair", AppDictus.getInstance().getOriginalLanguajeCode()+AppDictus.getInstance().getTraslationLanguajeCode(), 2);
+            	String orig_word = search_word.getText().toString();
+            	Log.i("APPdictusActivity", "Search word: " + orig_word + " from " + AppDictus.getInstance().getOriginalLanguajeCode() + " to " + AppDictus.getInstance().getTraslationLanguajeCode());
+            	
+            	if(!orig_word.equals("")){
+            		Word w = new Word(orig_word, AppDictus.getInstance().getOriginalLanguajeCode(), "", AppDictus.getInstance().getTraslationLanguajeCode());
+            		if(!db.find(w)){
+            			Log.i("APPdictusActivity.searchword", "Word not in DB, looking on wordreference");
+                    	
+            			WordReference wr = new WordReference(AppDictus.getInstance().getOriginalLanguajeCode(), AppDictus.getInstance().getTraslationLanguajeCode());
+            			wr.translate(orig_word);
+        				if(!wr.getError().isEmpty()){
+            				search_results.setTextColor(Color.RED);
+            				result = "ERROR: "+wr.getError();
+            			}
+            			else{
+            				String translation = wr.getTranslatedWord();
+            				Log.i("APPdictusActivity.searchword", "result from wordreference: (" + wr.getTranslatedWord() + ")");
+                			w.set_translation(translation);
+            				db.addWord(w);
+            				result = w.get_translation();
+            			}
+            		}else{
+            			w.set_num_checks(w.get_num_checks()+3);
+            			db.updateWord(w);
+        				result = w.get_translation();
+        				Log.i("APPdictusActivity.searchword", "Word found in DB: (" + result + ")");
+            		}                   
+            	}else{
+            		result = "The searched word must not be empty";
+            	}
+            	
+            	search_results.setText(result);
+            	search_word.setText("");
+            	search_word.setHint(orig_word);
+				loading.hide();
+            }
+        });
+        
+     // Lookup your LinearLayout assuming itÕs been given
+        // the attribute android:id="@+id/mainLayout"
+        RelativeLayout layout = (RelativeLayout)findViewById(R.id.ADLayout);
+
+        // Add the adView to it
+        layout.addView(adView);
+        adView.setBottom(10);
+        // Initiate a generic request to load it with an ad
+        adView.loadAd(new AdRequest());
+    }
+    
+    
+    
+    @Override
+	protected void onResume() {
+		super.onResume();
+		AppDictus.getInstance().init(getApplicationContext());
+		this.languaje_pair.setText(AppDictus.getInstance().getOriginalLanguaje() + " >> " + AppDictus.getInstance().getTraslationLanguaje());
+		//this.languaje_pair.setText(Double.toString(Math.random()));
+	}
+
+
+
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+    
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+    	switch (item.getItemId()) {
+        case R.id.goHome:
+        	Intent home = new Intent(getApplicationContext(), APPdictusActivity.class);
+			startActivity(home);
+			return true;
+        case R.id.goGame:
+        	Intent testGame = new Intent(getApplicationContext(), TestGame.class);
+			startActivity(testGame);
+			return true;
+        case R.id.goWords://Bad words activity
+        	Intent badWords = new Intent(getApplicationContext(), BadWords.class);
+			startActivity(badWords);
+			return true;
+        case R.id.goDiccionary:
+        	Intent searchedWords = new Intent(getApplicationContext(), SearchedWords.class);
+			startActivity(searchedWords);
+			return true;
+        case R.id.goSettings:
+        	Intent settings = new Intent(getApplicationContext(), SettingsActivity.class);
+			startActivity(settings);
+			return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
+    
+    @Override
+    protected void onDestroy() {
+    	if (adView != null)adView.destroy();
+    	super.onDestroy();
+    	tracker.stopSession();
+    }
+    
+}

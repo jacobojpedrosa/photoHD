@@ -1,0 +1,214 @@
+package com.noituk.appdictus.persistence;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Vector;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.util.Log;
+
+public class WordReference {
+	private String APIKEY ="96ee3";//KEY from wordreference 
+	private String APILevel = "0.8";//WordReference API version
+	private String APIURL = "http://api.wordreference.com";
+	private String APIFormat = "json";
+	
+	private String sourceWord = "";
+	private String sourceLanguaje = "es";
+	
+	private String destinationLanguaje = "en";
+	
+	private String translatedWord = "";
+	private HashMap results = new HashMap<String, Vector>();
+	private int numResults = 0;
+	private String translationError = "";
+
+	public String getSourceWord() {
+		return sourceWord;
+	}
+
+	public Vector getPrincipalTranslations(){
+		return (Vector) this.results.get("PrincipalTranslations");
+	}
+	
+	public Vector getAdditionalTranslations(){
+		return (Vector) this.results.get("AdditionalTranslations");
+	}
+	
+	public Vector getEntries(){
+		return (Vector) this.results.get("Entries");
+	}
+	
+	public Vector getOtherSideEntires(){
+		return (Vector) this.results.get("OtherSideEntires");
+	}
+	
+	public void setSourceWord(String sourceWord) {
+		this.sourceWord = sourceWord;
+	}
+
+	public String getSourceLanguaje() {
+		return sourceLanguaje;
+	}
+
+	public void setSourceLanguaje(String sourceLanguaje) {
+		this.sourceLanguaje = sourceLanguaje;
+	}
+
+	public String getDestinationLanguaje() {
+		return destinationLanguaje;
+	}
+
+	public void setDestinationLanguaje(String destinationLanguaje) {
+		this.destinationLanguaje = destinationLanguaje;
+	}
+
+	
+	public String getTranslatedWord() {
+		return this.translatedWord;
+	}
+
+	public int getNumResults() {
+		return numResults;
+	}
+
+	public String getError() {
+		return translationError;
+	}
+	
+	
+	public WordReference(String sourceLanguaje, String destinationLanguaje) {
+		super();
+		this.sourceLanguaje = sourceLanguaje;
+		this.destinationLanguaje = destinationLanguaje;
+		this.results.put("PrincipalTranslations", new Vector<String>());
+		this.results.put("AdditionalTranslations", new Vector<String>());
+		this.results.put("Entries", new Vector<String>());
+		this.results.put("OtherSideEntires", new Vector<String>());
+		this.results.put("Compounds", new Vector<String>());
+	}
+	
+	public void translate(String word){
+		try{
+			this.sourceWord = word;
+			URL url = this.prepareURL();
+			
+			JSONObject translation = new JSONObject();
+			String urlStr = url.toString();
+			urlStr = urlStr+"";
+			Log.i("WordReference.translate", url.toString());
+			translation = WordReference.JSONfromURLRequest(url.toString());
+			
+			
+			
+			if(!translation.isNull("term0")){
+				this.numResults = translation.length();
+				
+				//if(!translation.getJSONObject("term0").isNull("PrincipalTranslations"))this.results.add(translation.getJSONObject("term0").getJSONObject("PrincipalTranslations").getJSONObject("0").getJSONObject("FirstTranslation").getString("term"));
+				//if(!translation.getJSONObject("term0").isNull("Entries"))
+				
+				//PrincipalTranslations
+				if(!translation.getJSONObject("term0").isNull("PrincipalTranslations")){
+					this.translatedWord = translation.getJSONObject("term0").getJSONObject("PrincipalTranslations").getJSONObject("0").getJSONObject("FirstTranslation").getString("term");
+					for(int i=0; i<translation.getJSONObject("term0").getJSONObject("PrincipalTranslations").length();i++){
+						((Vector) this.results.get("PrincipalTranslations")).add(translation.getJSONObject("term0").getJSONObject("PrincipalTranslations").getJSONObject(""+i).getJSONObject("FirstTranslation").getString("term"));
+					}
+					Log.i("WordReference.translate", "PrincipalTranslations:" + this.translatedWord);
+				}
+				
+				//AdditionalTranslations
+				if(!translation.getJSONObject("term0").isNull("AdditionalTranslations")){
+					if(this.translatedWord.equals(""))this.translatedWord = translation.getJSONObject("term0").getJSONObject("Entries").getJSONObject("0").getJSONObject("FirstTranslation").getString("term");
+					for(int i=0; i<translation.getJSONObject("term0").getJSONObject("PrincipalTranslations").length();i++){
+						((Vector) this.results.get("PrincipalTranslations")).add(translation.getJSONObject("term0").getJSONObject("PrincipalTranslations").getJSONObject(""+i).getJSONObject("FirstTranslation").getString("term"));
+					}
+					Log.i("WordReference.translate", "Entries:" + this.translatedWord);
+				}
+				
+				//Entries
+				if(!translation.getJSONObject("term0").isNull("Entries")){//Entries
+					if(this.translatedWord.equals(""))this.translatedWord = translation.getJSONObject("term0").getJSONObject("Entries").getJSONObject("0").getJSONObject("FirstTranslation").getString("term");
+					for(int i=0; i<translation.getJSONObject("term0").getJSONObject("PrincipalTranslations").length();i++){
+						((Vector) this.results.get("PrincipalTranslations")).add(translation.getJSONObject("term0").getJSONObject("PrincipalTranslations").getJSONObject(""+i).getJSONObject("FirstTranslation").getString("term"));
+					}
+					Log.i("WordReference.translate", "Entries:" + this.translatedWord);
+				}
+				//Compounds
+				if(!translation.getJSONObject("term0").getJSONObject("original").isNull("Entries")){{
+					this.translatedWord = translation.getJSONObject("term0").getJSONObject("Compounds").getJSONObject("0").getJSONObject("FirstTranslation").getString("term");
+					Log.i("WordReference.translate", "Compounds:" + this.translatedWord);
+				}
+			}
+			else if(translation.has("Error")){
+				this.translationError = translation.getString("Note");
+			}
+			else{
+				this.translationError = "This word has not translation or does not exist";
+			}
+			
+			
+		}catch(Exception e){
+			Log.e("log_tag", "Error parsing data "+e.toString());
+		}
+	}
+	
+
+	private URL prepareURL() throws Exception{
+//		"http://api.wordreference.com/0.8/96ee3/json/enes/dog"
+		URL ret;
+		ret = new URL(this.APIURL+"/"+this.APILevel+"/"+this.APIKEY+"/"+this.APIFormat+"/"+this.sourceLanguaje.toLowerCase()+this.destinationLanguaje.toLowerCase()+"/"+this.sourceWord);
+		return ret;
+	}
+
+	
+	
+	public static JSONObject JSONfromURLRequest(String url){
+		InputStream is = null;
+		String result = "";
+		JSONObject jArray = null;
+
+		try{
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpPost httppost = new HttpPost(url);
+			HttpResponse response = httpclient.execute(httppost);
+			HttpEntity entity = response.getEntity();
+			is = entity.getContent();
+
+		}catch(Exception e){
+			Log.e("log_tag", "Error in http connection "+e.toString());
+		}
+
+		try{
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"UTF-8"),8);
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+			is.close();
+			result=sb.toString();
+		}catch(Exception e){
+			Log.e("log_tag", "Error converting result "+e.toString());
+		}
+
+		try{
+	        	jArray = new JSONObject(result);
+		}catch(JSONException e){
+			Log.e("log_tag", "Error parsing data "+e.toString());
+		}
+
+		return jArray;
+	}
+	
+	
+}
